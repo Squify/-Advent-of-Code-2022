@@ -1,25 +1,43 @@
 with open('inputs/day3.txt') as f:
     datas = f.read().splitlines()
 
-caps = -38
-minus = -96
+uppercase_ascii_to_priority = -38
+lowercase_ascii_to_priority = -96
 
 priority_sum = 0
-print(ord('A'), ord('a')) # 65 97
+
+line_1, line_2, line_3 = '', '', ''
+badges_sum = 0
+line_count = 1
 
 for data in datas:
-    first_compartment = data[0:int(len(data)/2)]
-    second_compartment = data[int(len(data)/2):len(data)]
+    first_compartment = data[0:int(len(data) / 2)]
+    second_compartment = data[int(len(data) / 2):len(data)]
 
     for letter in first_compartment:
         if letter in second_compartment:
             if letter.isupper():
-                print(letter, ord(letter) + caps)
-                priority_sum += ord(letter) + caps
+                priority_sum += ord(letter) + uppercase_ascii_to_priority
             else:
-                print(letter, ord(letter) + minus)
-                priority_sum += ord(letter) + minus
+                priority_sum += ord(letter) + lowercase_ascii_to_priority
             break
 
+    if line_count == 1:
+        line_1 = data
+        line_count += 1
+    elif line_count == 2:
+        line_2 = data
+        line_count += 1
+    elif line_count == 3:
+        line_3 = data
+        for letter in line_3:
+            if letter in line_1 and letter in line_2:
+                if letter.isupper():
+                    badges_sum += ord(letter) + uppercase_ascii_to_priority
+                else:
+                    badges_sum += ord(letter) + lowercase_ascii_to_priority
+                break
+        line_count = 1
 
-print(priority_sum)
+print("The sum of the priorities of the error item is", priority_sum)
+print("The sum of the badges priorities is", badges_sum)
